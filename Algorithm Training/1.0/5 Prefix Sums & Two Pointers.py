@@ -190,26 +190,34 @@ def task_h():
     n, k = map(int, input().split())
     line = input()
 
-    left = 0
-    right = 0
-    max_len = 0
-    char_count = {"0": 0}
-    while left < n and right < n:
-        left_char = line[left]
-        right_char = line[right]
-        if (right_char in char_count and char_count[right_char] > k) or (max(char_count.values()) > k):
-            char_count[left_char] -= 1
-            left += 1
-        else:
-            right += 1
+    left, right = 0, 0
+    temp_left, temp_right = 0, 0
+    max_len = 1
+    start_char = 0
+    char_count = {}
+    while temp_left < n and temp_right < n:
+        if temp_right - temp_left >= right - left:
+            right_char = line[right]
+
             if right_char not in char_count:
                 char_count[right_char] = 1
             else:
                 char_count[right_char] += 1
-        print(char_count)
+            right += 1
+        else:
+            left_char = line[left]
+            char_count[left_char] -= 1
+            left += 1
 
+        if char_count[right_char] > k:
+            temp_left += 1
+        else:
+            if temp_right - temp_left + 1 > max_len:
+                max_len = sum(char_count.values())
+                start_char = left + 1
+            temp_right += 1
 
-    return max_len
+    return max_len, start_char
 
 
 print(task_h())
