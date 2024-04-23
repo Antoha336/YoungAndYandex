@@ -220,4 +220,37 @@ def task_h():
     return max_len, start_char
 
 
-print(task_h())
+def task_i():
+    K = int(input())
+    commands = input()
+    amount_of_commands = len(commands)
+
+    left, right = 0, K - 1
+    temp_left, temp_right = 0, right + 1
+    cases = 0
+    current_cases = 0
+    while temp_right < amount_of_commands:
+        command = commands[temp_right - K * ((temp_right - left) // K)]
+        next_command = commands[temp_right]
+        if command == next_command:
+            current_cases += 1
+            if temp_right < amount_of_commands - 1:
+                temp_right += 1
+            else:
+                cases += ((1 + current_cases) / 2) * current_cases
+                break
+        else:
+            cases += ((1 + current_cases) / 2) * current_cases
+            if temp_right == right + 1:
+                if K == 1:
+                    temp_right += 1
+                left, right = left + 1, right + 1
+                temp_left, temp_right = left, right + 1
+            else:
+                if K == 1:
+                    temp_right += 1
+                left, right = left + temp_right - right - 1, right + temp_right - right - 1
+                temp_left, temp_right = left, right + 1
+            current_cases = 0
+
+    return int(cases)
